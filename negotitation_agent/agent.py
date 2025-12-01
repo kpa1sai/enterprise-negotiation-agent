@@ -1,7 +1,12 @@
 from google.adk.agents.llm_agent import Agent
 from google.adk.agents.sequential_agent import SequentialAgent
 from google.adk.agents.loop_agent import LoopAgent
+import logging
 
+
+logging.basicConfig( filename='log/negotiation_agent.log',
+    level=logging.DEBUG,
+    format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
 
 def get_vendor_contact_info(vendor_name: str):
     contact_info = [{"name":"Office supplies Co", "contact":"office@officesuppliesco.com"},

@@ -1,8 +1,17 @@
 import asyncio
+import logging
 from google.adk.agents.llm_agent import Agent
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types
+from google.adk.models.google_llm import Gemini
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+
+
+logging.basicConfig( filename='log/procurement_agent.log',
+    level=logging.DEBUG,
+    format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
+
 
 def get_vendor_list():
     vendors = [
@@ -31,9 +40,15 @@ def get_product_price_by_vendor(vendor_name: str, product_name: str):
     vendor_prices = price_list.get(vendor_name, {})
     return vendor_prices.get(product_name, None)
 
+retry_config = types.HttpRetryOptions(
+    attempts=3,
+    initial_delay=1.0,
+    max_delay=5.0,
+    http_status_codes=[429, 500, 503, 504]
+)
 
 root_agent = Agent(
-    model='gemini-2.5-flash',
+    model=Gemini(model="gemini-2.5-flash", retry_options=retry_config),
     name='root_agent',
     description='A helpful assistant that gathers procurement requirements from business users.',
     instruction='''You are a procurement requirement gathering agent.
@@ -109,3 +124,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+a2a_app = to_a2a(
+    agent=root_agent,
+    port=8080,
+)
