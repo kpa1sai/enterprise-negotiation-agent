@@ -5,10 +5,22 @@ from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types
 from google.adk.models.google_llm import Gemini
+from dotenv import load_dotenv
+import os
+import vertexai
+
+load_dotenv()
+GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
+GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
+GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
+
+print(f"Procurement Agent - GOOGLE_CLOUD_PROJECT: {GOOGLE_CLOUD_PROJECT}, GOOGLE_CLOUD_LOCATION: {GOOGLE_CLOUD_LOCATION}")
+
+vertexai.init(project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLOUD_LOCATION)
+
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
-
-logging.basicConfig( filename='log/procurement_agent.log',
+logging.basicConfig( filename='procurement_agent.log',
     level=logging.DEBUG,
     format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
 
@@ -128,4 +140,5 @@ if __name__ == "__main__":
 a2a_app = to_a2a(
     agent=root_agent,
     port=8080,
+
 )

@@ -4,7 +4,7 @@ from google.adk.agents.loop_agent import LoopAgent
 import logging
 
 
-logging.basicConfig( filename='log/negotiation_agent.log',
+logging.basicConfig( filename='negotiation_agent.log',
     level=logging.DEBUG,
     format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
 

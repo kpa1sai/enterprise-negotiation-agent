@@ -1,6 +1,6 @@
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools.function_tool import FunctionTool
-from google.adk.agents.remote_a2a_agent import RemoteA2aAgent, AGENT_CARD_WELL_KNOWN_PATH
+from google.genai import Client
 import asyncio
 import logging
 import dotenv
@@ -13,7 +13,11 @@ GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
 
 print(f"Master Agent - GOOGLE_CLOUD_PROJECT: {GOOGLE_CLOUD_PROJECT}, GOOGLE_CLOUD_LOCATION: {GOOGLE_CLOUD_LOCATION}")
 
-logging.basicConfig( filename='log/master_agent.log',
+client = Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLOUD_LOCATION)
+
+from google.adk.agents.remote_a2a_agent import RemoteA2aAgent, AGENT_CARD_WELL_KNOWN_PATH
+
+logging.basicConfig( filename='master_agent.log',
     level=logging.DEBUG,
     format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
 
@@ -29,8 +33,9 @@ approval_tool = FunctionTool(func=external_approval_tool)
 
 procurement_agent = RemoteA2aAgent(
     name='procurement_agent',
-    agent_card= "http://localhost:8080",
-    description='A remote agent handling procurement tasks.'
+    agent_card= f"http://localhost:8080/{AGENT_CARD_WELL_KNOWN_PATH}",
+    description='A remote agent handling procurement tasks.',
+    
 )
 
 root_agent = LlmAgent(
