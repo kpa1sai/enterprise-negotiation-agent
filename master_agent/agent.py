@@ -17,7 +17,7 @@ client = Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLO
 
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent, AGENT_CARD_WELL_KNOWN_PATH
 
-logging.basicConfig( filename='log/master_agent.log',
+logging.basicConfig( filename='master_agent.log',
     level=logging.DEBUG,
     format="%(filename)s:%(lineno)s %(levelname)s:%(message)s")
 

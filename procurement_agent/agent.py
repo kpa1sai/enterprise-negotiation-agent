@@ -7,6 +7,7 @@ from google.genai import types
 from google.adk.models.google_llm import Gemini
 from dotenv import load_dotenv
 import os
+import vertexai
 
 load_dotenv()
 GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
@@ -15,6 +16,7 @@ GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
 
 print(f"Procurement Agent - GOOGLE_CLOUD_PROJECT: {GOOGLE_CLOUD_PROJECT}, GOOGLE_CLOUD_LOCATION: {GOOGLE_CLOUD_LOCATION}")
 
+vertexai.init(project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLOUD_LOCATION)
 
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
@@ -138,4 +140,5 @@ if __name__ == "__main__":
 a2a_app = to_a2a(
     agent=root_agent,
     port=8080,
+
 )
